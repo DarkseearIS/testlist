@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {getUser} from "../reducers/user-reducer";
+import {deleteUser, getUser} from "../reducers/user-reducer";
 import {connect} from "react-redux";
 import {compose} from "redux";
 import UserInfo from "./UserInfo";
@@ -23,8 +23,8 @@ const ShowUser = (props) => {
             display: 'flex',
             flexWrap: 'wrap',
             '& > *': {
-                margin: theme.spacing(1),
-                width: theme.spacing(35),
+                margin: theme.spacing(4),
+                width: theme.spacing(32),
                 height: theme.spacing(7)
             },
         },
@@ -43,21 +43,16 @@ const ShowUser = (props) => {
         {!user ? null : user.map(el => <div key={el._id}>
             {countS()}
             <Paper elevation={3}>
-                <UserInfo id={count} email={el.email} name={el.name} lastName={el.lastName}/>
+                <UserInfo _id={el._id} id={count} email={el.email} name={el.name} lastName={el.lastName}
+                          deleteUser={props.deleteUser} classesPaper={classes}/>
             </Paper>
-
-        </div>)}
-
-        <div>
-            <Modals classesPaper={classes}/>
         </div>
-
-
+        )}
+        <div>
+            <Modals/>
+        </div>
     </div>
-
-
 };
-
 
 const mapStateToProps = (state) => {
     return {
@@ -66,5 +61,5 @@ const mapStateToProps = (state) => {
 }
 
 export default compose(
-    connect(mapStateToProps, {getUser})
+    connect(mapStateToProps, {getUser, deleteUser})
 )(ShowUser);

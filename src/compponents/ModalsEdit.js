@@ -6,7 +6,10 @@ import {userAPI} from "../api/api";
 import {getUser} from "../reducers/user-reducer";
 import {compose} from "redux";
 import {connect} from "react-redux";
-import Paper from "@material-ui/core/Paper";
+import EditIcon from "@material-ui/icons/Edit";
+import DeleteIcon from "@material-ui/icons/Delete";
+import Button from "@material-ui/core/Button";
+import ButtonGroup from "@material-ui/core/ButtonGroup";
 
 
 function getModalStyle() {
@@ -28,26 +31,25 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: theme.palette.background.paper,
         border: '2px solid #fff',
         boxShadow: theme.shadows[5],
-        padding: theme.spacing(2, 4, 3)
+        padding: theme.spacing(2, 5, 5, 3)
     },
     stylePaper: {
-        height: theme.spacing(13),
+        height: theme.spacing(7),
         borderStyle:'dashed',
         cursor:"pointer",
         textAlign:"center",
-        fontSize: "63px",
-
+        fontSize: "36px"
     },
-    '&:hover stylePaper': {
-        borderColor:'red'
-}
+    styleButton:{
+        display:'flex'
+    }
 }));
 
-const Modals = (props) => {
+const ModalsEdit = (props) => {
 
     const onSubmit = (data) => {
         let {name, lastName, email} = data;
-        userAPI.setUserInfo({name, lastName, email})
+        userAPI.editUserInfo(props.id, {name, lastName, email})
             .then(response => props.getUser())
             .then(setOpen(false));
     };
@@ -66,16 +68,22 @@ const Modals = (props) => {
     };
     const body = (
         <div style={modalStyle} className={classes.paper}>
-            <h2 id="simple-modal-title"> Создание пользователя</h2>
-            <MaterialUiForm nameButton={"Добавить"} onSubmit={onSubmit}/>
+            <h2 id="simple-modal-title"> Редактирование данных: </h2>
+            <MaterialUiForm initialValues={props.user!=null?props.user[0]:null} nameButton={"Изменить"}  onSubmit={onSubmit}/>
         </div>
     );
 
     return (
         <div>
-            <Paper className={classes.stylePaper} elevation={0} onClick={handleOpen}>
-                    +
-            </Paper>
+            <div>
+                <Button  elevation={0} onClick={handleOpen} >
+                    <EditIcon/>
+                </Button>
+                <Button onClick={props.delUser} >
+                    <DeleteIcon/>
+                </Button>
+            </div>
+
             <Modal
                 open={open}
                 onClose={handleClose}
@@ -94,8 +102,6 @@ const mapStateToProps = (state) => {
     }
 };
 
-
-
 export default compose(
     connect(mapStateToProps, {getUser})
-)(Modals);
+)(ModalsEdit);

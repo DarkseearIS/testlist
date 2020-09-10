@@ -1,12 +1,10 @@
 import React from "react";
 import {makeStyles} from "@material-ui/core/styles";
 import Modal from "@material-ui/core/Modal";
-import MaterialUiForm from "./MaterialUiForm";
-import {userAPI} from "../api/api";
-import {getUser} from "../reducers/user-reducer";
 import {compose} from "redux";
 import {connect} from "react-redux";
 import Paper from "@material-ui/core/Paper";
+import MaterialUiForm from "../MaterialUiForm";
 
 
 function getModalStyle() {
@@ -23,33 +21,25 @@ function getModalStyle() {
 const useStyles = makeStyles((theme) => ({
     paper: {
         position: 'absolute',
-        minWidth: 250,
-        maxWidth: '100%',
+        width: 500,
         backgroundColor: theme.palette.background.paper,
         border: '2px solid #fff',
         boxShadow: theme.shadows[5],
         padding: theme.spacing(2, 4, 3)
     },
     stylePaper: {
-        height: theme.spacing(13),
+        height: theme.spacing(7),
         borderStyle:'dashed',
         cursor:"pointer",
         textAlign:"center",
-        fontSize: "63px",
-
-    },
-    '&:hover stylePaper': {
-        borderColor:'red'
-}
+        fontSize: "36px"
+    }
 }));
 
-const Modals = (props) => {
+const ModalsHOC = ({executor, nameModal, }) => {
 
     const onSubmit = (data) => {
-        let {name, lastName, email} = data;
-        userAPI.setUserInfo({name, lastName, email})
-            .then(response => props.getUser())
-            .then(setOpen(false));
+        executor(data);
     };
 
     const classes = useStyles();
@@ -64,10 +54,11 @@ const Modals = (props) => {
     const handleClose = () => {
         setOpen(false);
     };
+
     const body = (
         <div style={modalStyle} className={classes.paper}>
-            <h2 id="simple-modal-title"> Создание пользователя</h2>
-            <MaterialUiForm nameButton={"Добавить"} onSubmit={onSubmit}/>
+            <h2 id="simple-modal-title"> {nameModal}</h2>
+            <MaterialUiForm  onSubmit={onSubmit}/>
         </div>
     );
 
@@ -88,14 +79,6 @@ const Modals = (props) => {
     );
 };
 
-const mapStateToProps = (state) => {
-    return {
-        user:state.userReducer.user
-    }
-};
-
-
-
 export default compose(
-    connect(mapStateToProps, {getUser})
-)(Modals);
+    connect()
+)(ModalsHOC);

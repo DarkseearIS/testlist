@@ -9,9 +9,10 @@ const useStyles = makeStyles((theme) => ({
     root: {
         '& .MuiTextField-root': {
             margin: theme.spacing(1),
-            width: 500,
+            width: '100%'
         },
     },
+
 }));
 
 const validate = values => {
@@ -23,12 +24,12 @@ const validate = values => {
         'email',
         'favoriteColor',
         'notes'
-    ]
+    ];
     requiredFields.forEach(field => {
         if (!values[field]) {
             errors[field] = 'Required'
         }
-    })
+    });
     if (
         values.email &&
         !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
@@ -55,13 +56,14 @@ const renderTextField = ({
 );
 
 
-const MaterialUiForm = ({handleSubmit, pristine, submitting}) => {
+const MaterialUiForm = (props) => {
     const classes = useStyles();
     return (
-        <form className={classes.root} onSubmit={handleSubmit}>
+        <form className={classes.root} onSubmit={props.handleSubmit}>
             <div>
                 <Field name="name" component={renderTextField} label="First Name"/>
             </div>
+
             <div>
                 <Field name="lastName" component={renderTextField} label="Last Name"/>
             </div>
@@ -69,9 +71,8 @@ const MaterialUiForm = ({handleSubmit, pristine, submitting}) => {
                 <Field name="email" component={renderTextField} label="Email"/>
             </div>
             <div>
-
-                <Button type="submit" color="secondary" disabled={pristine || submitting}>
-                    ДОБАВИТЬ
+                <Button type="submit" color="secondary" disabled={props.pristine || props.submitting}>
+                    {props.nameButton}
                 </Button>
             </div>
         </form>

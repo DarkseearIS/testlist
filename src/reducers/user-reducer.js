@@ -33,4 +33,13 @@ export const getUser = () => {
 
 };
 
+export const deleteUser = (id) => {
+  return (dispatch) => {
+      userAPI.deleteUser(id)
+          .then(response => {
+              dispatch(setUser(response.date))
+          })
+  }
+};
+
 export default userReducer;
