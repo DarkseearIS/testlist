@@ -41,12 +41,12 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const UserInfo = ({id, name, lastName, email, deleteUser, _id}) => {
+const UserInfo = ({id, name, lastName, email, deleteOneUser, _id, userInfo, getAllUser}) => {
 
     const classes = useStyles();
 
     const delUser = () => {
-        deleteUser(_id);
+        deleteOneUser(_id);
     };
 
     return <div>
@@ -67,7 +67,8 @@ const UserInfo = ({id, name, lastName, email, deleteUser, _id}) => {
                 </div>
             </div>
             <div className={classes.modalsEdit}>
-                <ModalsEdit delUser={delUser} id={_id} />
+                <ModalsEdit userInfo={userInfo} delUser={delUser}
+                            id={_id} id_count={id} getAllUser={getAllUser}/>
             </div>
         </div>
     </div>

@@ -2,7 +2,7 @@ import * as axios from "axios"
 
 const instance = axios.create(
     {
-        baseURL: 'https://armspb.mooo.com:3200/api/',
+        baseURL: 'http://armspb.mooo.com/api/',
     }
 );
 
@@ -12,7 +12,6 @@ export const userAPI = {
     },
 
     setUserInfo(data) {
-        debugger
         return instance.post(`addUser`, data)
     },
 

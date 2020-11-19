@@ -3,9 +3,6 @@ import {makeStyles} from "@material-ui/core/styles";
 import Modal from "@material-ui/core/Modal";
 import MaterialUiForm from "./MaterialUiForm";
 import {userAPI} from "../api/api";
-import {getUser} from "../reducers/user-reducer";
-import {compose} from "redux";
-import {connect} from "react-redux";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 import Button from "@material-ui/core/Button";
@@ -50,7 +47,7 @@ const ModalsEdit = (props) => {
     const onSubmit = (data) => {
         let {name, lastName, email} = data;
         userAPI.editUserInfo(props.id, {name, lastName, email})
-            .then(response => props.getUser())
+            .then(response => props.getAllUser())
             .then(setOpen(false));
     };
 
@@ -69,7 +66,8 @@ const ModalsEdit = (props) => {
     const body = (
         <div style={modalStyle} className={classes.paper}>
             <h2 id="simple-modal-title"> Редактирование данных: </h2>
-            <MaterialUiForm initialValues={props.user!=null?props.user[0]:null} nameButton={"Изменить"}  onSubmit={onSubmit}/>
+            <MaterialUiForm initialValues={props.userInfo!=null?props.userInfo[(props.id_count-1)]:null}
+                            nameButton={"Изменить"}  onSubmit={onSubmit}/>
         </div>
     );
 
@@ -96,12 +94,5 @@ const ModalsEdit = (props) => {
     );
 };
 
-const mapStateToProps = (state) => {
-    return {
-        user:state.userReducer.user
-    }
-};
 
-export default compose(
-    connect(mapStateToProps, {getUser})
-)(ModalsEdit);
+export default ModalsEdit;

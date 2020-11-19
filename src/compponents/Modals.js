@@ -3,9 +3,6 @@ import {makeStyles} from "@material-ui/core/styles";
 import Modal from "@material-ui/core/Modal";
 import MaterialUiForm from "./MaterialUiForm";
 import {userAPI} from "../api/api";
-import {getUser} from "../reducers/user-reducer";
-import {compose} from "redux";
-import {connect} from "react-redux";
 import Paper from "@material-ui/core/Paper";
 
 
@@ -48,7 +45,7 @@ const Modals = (props) => {
     const onSubmit = (data) => {
         let {name, lastName, email} = data;
         userAPI.setUserInfo({name, lastName, email})
-            .then(response => props.getUser())
+            .then(response => props.getAllUser())
             .then(setOpen(false));
     };
 
@@ -88,14 +85,5 @@ const Modals = (props) => {
     );
 };
 
-const mapStateToProps = (state) => {
-    return {
-        user:state.userReducer.user
-    }
-};
 
-
-
-export default compose(
-    connect(mapStateToProps, {getUser})
-)(Modals);
+export default Modals;

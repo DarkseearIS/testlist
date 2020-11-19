@@ -19,7 +19,6 @@ const userReducer = (state = initialState, action ) => {
     }
 };
 
-
 export const setUser = (user) => ({type:USER, user}) ;
 
 export const getUser = () => {
@@ -29,8 +28,6 @@ export const getUser = () => {
                 dispatch(setUser(response.data))
             })
     }
-
-
 };
 
 export const deleteUser = (id) => {

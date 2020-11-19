@@ -1,22 +1,24 @@
 import React, {useEffect, useState} from "react";
-import {deleteUser, getUser} from "../reducers/user-reducer";
-import {connect} from "react-redux";
-import {compose} from "redux";
+import {useDispatch, useSelector} from "react-redux";
 import UserInfo from "./UserInfo";
 import {makeStyles} from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Modals from "./Modals";
+import {deleteUser, getUser} from "../reducers/user-reducer";
+import {getUserInfo} from "../selectors/selectors";
 
 const ShowUser = (props) => {
+    const dispatch = useDispatch();
+    const userInfo = useSelector(getUserInfo);
+    const getAllUser = () => {dispatch(getUser())};
+    const deleteOneUser = (id) => {dispatch(deleteUser(id))};
 
-    let [user, setUser] = useState(props.user);
-
+    let [user, setUser] = useState(userInfo);
 
     useEffect(() => {
-        if (!props.user) props.getUser();
-        setUser(props.user);
-    }, [props.user]);
-
+        if (!userInfo) getAllUser();
+        setUser(userInfo);
+    }, [userInfo]);
 
     const useStyles = makeStyles((theme) => ({
         root: {
@@ -30,7 +32,6 @@ const ShowUser = (props) => {
         },
     }));
 
-
     let count = 0;
 
     const countS = () => {
@@ -38,28 +39,22 @@ const ShowUser = (props) => {
     };
 
     const classes = useStyles();
-    return <div className={classes.root}>
 
+    return <div className={classes.root}>
         {!user ? null : user.map(el => <div key={el._id}>
             {countS()}
             <Paper elevation={3}>
-                <UserInfo _id={el._id} id={count} email={el.email} name={el.name} lastName={el.lastName}
-                          deleteUser={props.deleteUser} classesPaper={classes}/>
+                <UserInfo _id={el._id} id={count} email={el.email} name={el.name}
+                          lastName={el.lastName} deleteOneUser={deleteOneUser}
+                          classesPaper={classes} userInfo={userInfo}
+                          getAllUser={getAllUser}/>
             </Paper>
         </div>
         )}
         <div>
-            <Modals/>
+            <Modals getAllUser={getAllUser} />
         </div>
     </div>
 };
 
-const mapStateToProps = (state) => {
-    return {
-        user: state.userReducer.user
-    }
-}
-
-export default compose(
-    connect(mapStateToProps, {getUser, deleteUser})
-)(ShowUser);
+export default ShowUser;
